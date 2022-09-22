@@ -1,23 +1,34 @@
-import logo from './logo.svg';
+import { useEffect, useState } from 'react';
 import './App.css';
+import Dish from './components/Dish';
 
 function App() {
+  const [dishs, setDishs] = useState([])
+  useEffect(() => {
+    fetch('https://pizza-restaurant-django-react.herokuapp.com/api/dishs/')
+      .then(response => response.json())
+      .then(data => {
+        setDishs(data);
+      })
+  }, [])
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div className='banner-container'>
+        <img src="/images/banner.png" alt="Banner Pizza Restaurant" />
+      </div>
+      <div className='logo-container'>
+        <img src="/images/logo.png" alt="Logo Pizza Restaurant" />
+      </div>
+      <section className='menu'>
+        {dishs.map(
+          dish => (<Dish
+            key={dish.id}
+            name={dish.name}
+            desc={dish.desc}
+            img={dish.image}
+            price={dish.price}
+          />))}
+      </section>
     </div>
   );
 }
